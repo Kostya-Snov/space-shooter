@@ -5,6 +5,9 @@
     "scripts": {
         "dev": "vite"
     },
+    "dependencies": {
+        "pixi.js": "^8"
+    },
     "devDependencies": {
         "typescript": "^6",
         "vite": "^8"

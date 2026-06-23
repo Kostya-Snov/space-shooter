@@ -1,0 +1,8 @@
+body {
+    display: flex;
+    justify-content: safe center;
+    align-items: safe center;
+
+    margin: 0;
+    padding: 0.5rem;
+}
