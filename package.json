@@ -1,0 +1,12 @@
+{
+    "name": "space-shooter",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "typescript": "^6",
+        "vite": "^8"
+    }
+}
