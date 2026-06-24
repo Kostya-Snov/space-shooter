@@ -12,7 +12,9 @@ const enum PressedKey {
 
 export class Spaceship extends Sprite {
     private readonly onSpaceshipBulletCreate: (centerX: number, bottomY: number) => void;
-    private readonly removeListenerFunctions: (() => void)[];
+
+    private readonly handleKeyDown: (event: KeyboardEvent) => void;
+    private readonly handleKeyUp: (event: KeyboardEvent) => void;
     private pressedKey = PressedKey.None;
 
 
@@ -20,13 +22,11 @@ export class Spaceship extends Sprite {
         super(Assets.get("/assets/spaceship.png"));
         this.onSpaceshipBulletCreate = onSpaceshipBulletCreate;
 
-        this.removeListenerFunctions = [];
-
         this.scale = 0.5;
         this.x = (appConfig.canvasWidth - this.width) / 2;
         this.y = appConfig.canvasHeight - this.height;
 
-        const handleKeyDown = (event: KeyboardEvent): void => {
+        this.handleKeyDown = (event: KeyboardEvent): void => {
             switch (event.key) {
                 case "ArrowLeft":
                     this.pressedKey = PressedKey.Left;
@@ -41,10 +41,9 @@ export class Spaceship extends Sprite {
                     break;
             }
         };
-        addEventListener("keydown", handleKeyDown);
-        this.removeListenerFunctions.push(() => removeEventListener("keydown", handleKeyDown));
+        addEventListener("keydown", this.handleKeyDown);
 
-        const handleKeyUp = (event: KeyboardEvent): void => {
+        this.handleKeyUp = (event: KeyboardEvent): void => {
             const { key } = event;
             if (
                 this.pressedKey === PressedKey.Left && key === "ArrowLeft"
@@ -53,8 +52,7 @@ export class Spaceship extends Sprite {
                 this.pressedKey = PressedKey.None;
             }
         };
-        addEventListener("keyup", handleKeyUp);
-        this.removeListenerFunctions.push(() => removeEventListener("keyup", handleKeyUp))
+        addEventListener("keyup", this.handleKeyUp);
     }
 
 
@@ -66,9 +64,8 @@ export class Spaceship extends Sprite {
     public override destroy(options?: DestroyOptions): void {
         super.destroy(options);
 
-        for (const removeListener of this.removeListenerFunctions) {
-            removeListener();
-        }
+        removeEventListener("keydown", this.handleKeyDown);
+        removeEventListener("keyup", this.handleKeyUp);
     }
 
 
@@ -93,8 +90,7 @@ export class Spaceship extends Sprite {
 
     public disable(): void {
         this.pressedKey = PressedKey.None;
-        for (const removeListener of this.removeListenerFunctions) {
-            removeListener();
-        }
+        removeEventListener("keydown", this.handleKeyDown);
+        removeEventListener("keyup", this.handleKeyUp);
     }
 }

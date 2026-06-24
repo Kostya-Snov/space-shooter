@@ -1,14 +1,15 @@
 import { Graphics } from "pixi.js";
+import { appConfig } from "./appConfig";
 
 
-export class SpaceshipBullet extends Graphics {
+export class BossBullet extends Graphics {
     private readonly onDisappear: () => void;
     private readonly onMove: () => void;
 
 
     public constructor(
         centerX: number,
-        bottomY: number,
+        topY: number,
         onDisappear: () => void,
         onMove: () => void
     ) {
@@ -16,22 +17,22 @@ export class SpaceshipBullet extends Graphics {
         this.onDisappear = onDisappear;
         this.onMove = onMove;
 
-        const radius = 10;
+        const radius = 15;
         this
             .setFillStyle({
-                color: 0x00FFFF
+                color: 0xFF0000
             })
             .circle(radius, radius, radius)
             .fill();
         this.x = centerX - radius;
-        this.y = bottomY - 2 * radius;
+        this.y = topY;
     }
 
 
     public update(delay: number): void {
-        const speed = 0.4;
-        this.y -= delay * speed;
-        if (this.y <= -this.height) {
+        const speed = 0.5;
+        this.y += delay * speed;
+        if (this.y >= appConfig.canvasHeight) {
             this.onDisappear();
         } else {
             this.onMove();
