@@ -2,14 +2,24 @@ import { Container } from "pixi.js"
 import { assert } from "./assert";
 import { Asteroid } from "./Asteroid";
 import { Background } from "./Background";
+import { LossLabel } from "./LossLabel";
 import { Spaceship } from "./Spaceship";
 import { SpaceshipBullet } from "./SpaceshipBullet";
+import { SpaceshipBulletCountLabel } from "./SpaceshipBulletCountLabel";
+import { TimerLabel } from "./TimerLabel";
+import { WinLabel } from "./WinLabel";
 
 
 export class World extends Container {
     private readonly spaceship: Spaceship;
     private readonly spaceshipBullets: SpaceshipBullet[] = [];
     private readonly asteroids: Asteroid[] = [];
+    private readonly spaceshipBulletCountLabel: SpaceshipBulletCountLabel;
+    private readonly timerLabel: TimerLabel;
+
+    private spaceshipBulletCount = 10;
+    private spentTime = 0;
+    private isFinished = false;
 
 
     public constructor() {
@@ -18,7 +28,17 @@ export class World extends Container {
         this.addChild(new Background());
 
         const handleSpaceshipBulletCreate = (centerX: number, bottomY: number): void => {
-            const handleDisappear = () => this.removeSpaceshipBullet(spaceshipBullet);
+            if (this.spaceshipBulletCount === 0) {
+                return;
+            }
+
+            const handleDisappear = (): void => {
+                this.removeSpaceshipBullet(spaceshipBullet);
+
+                if (this.spaceshipBulletCount === 0 && this.spaceshipBullets.length === 0) {
+                    this.handleFinish(false);
+                }
+            };
 
             const handleMove = (): void => {
                 const spaceshipBulletBounds = spaceshipBullet.getBounds();
@@ -42,6 +62,16 @@ export class World extends Container {
 
                     this.removeSpaceshipBullet(spaceshipBullet);
                     this.removeAsteroid(asteroid);
+
+                    if (this.asteroids.length === 0) {
+                        this.handleFinish(true);
+                    } else if (
+                        this.spaceshipBulletCount === 0
+                        && this.spaceshipBullets.length === 0
+                    ) {
+                        this.handleFinish(false);
+                    }
+
                     break;
                 }
             }
@@ -54,9 +84,15 @@ export class World extends Container {
             );
             this.spaceshipBullets.push(spaceshipBullet);
             this.addChild(spaceshipBullet);
+
+            --this.spaceshipBulletCount;
+            this.spaceshipBulletCountLabel.change(this.spaceshipBulletCount);
         }
         this.spaceship = new Spaceship(handleSpaceshipBulletCreate);
         this.addChild(this.spaceship);
+
+        this.spaceshipBulletCountLabel = new SpaceshipBulletCountLabel(this.spaceshipBulletCount);
+        this.addChild(this.spaceshipBulletCountLabel);
 
         const asteroidInitialCount = 5;
         this.asteroids = Array.from(
@@ -66,6 +102,10 @@ export class World extends Container {
             () => new Asteroid()
         );
         this.addChild(...this.asteroids);
+
+        const initialRemainingTime = 60 * 1000;
+        this.timerLabel = new TimerLabel(initialRemainingTime);
+        this.addChild(this.timerLabel);
     }
 
 
@@ -79,6 +119,16 @@ export class World extends Container {
 
 
     public update(delta: number): void {
+        if (!this.isFinished) {
+            this.spentTime += delta;
+            const initialRemainingTime = 60 * 1000;
+            if (this.spentTime >= initialRemainingTime) {
+                this.spentTime = initialRemainingTime;
+                this.handleFinish(false);
+            }
+            this.timerLabel.change(initialRemainingTime - this.spentTime)
+        }
+
         this.spaceship.update(delta);
         for (const spaceshipBullet of this.spaceshipBullets) {
             spaceshipBullet.update(delta);
@@ -104,5 +154,12 @@ export class World extends Container {
         this.asteroids.splice(index, 1);
         this.removeChild(asteroid);
         asteroid.cleanup();
+    }
+
+
+    private handleFinish(isWin: boolean): void {
+        this.addChild(isWin ? new WinLabel() : new LossLabel());
+        this.spaceship.disable();
+        this.isFinished = true;
     }
 }

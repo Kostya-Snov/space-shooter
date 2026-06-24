@@ -89,4 +89,12 @@ export class Spaceship extends Sprite {
             }
         }
     }
+
+
+    public disable(): void {
+        this.pressedKey = PressedKey.None;
+        for (const removeListener of this.removeListenerFunctions) {
+            removeListener();
+        }
+    }
 }
