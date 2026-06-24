@@ -19,7 +19,7 @@ export class Spaceship extends Sprite {
 
 
     public constructor(onSpaceshipBulletCreate: (centerX: number, bottomY: number) => void) {
-        super(Assets.get("/assets/spaceship.png"));
+        super(Assets.get("spaceship.png"));
         this.onSpaceshipBulletCreate = onSpaceshipBulletCreate;
 
         this.scale = 0.5;
@@ -57,7 +57,7 @@ export class Spaceship extends Sprite {
 
 
     public static getAssetUrls(): string[] {
-        return ["/assets/spaceship.png"];
+        return ["spaceship.png"];
     }
 
 

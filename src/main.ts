@@ -11,7 +11,13 @@ await Promise.all([
         width: appConfig.canvasWidth,
         height: appConfig.canvasHeight
     }),
-    Assets.load(World.getAssetUrls())
+    (async () => {
+        await Assets.init({
+            basePath: `${import.meta.env.BASE_URL}/assets/`
+        });
+
+        await Assets.load(World.getAssetUrls());
+    })()
 ]);
 
 const world = new World();

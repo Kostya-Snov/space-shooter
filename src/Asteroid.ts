@@ -15,7 +15,7 @@ export class Asteroid extends Sprite {
 
 
     public constructor() {
-        super(Assets.get("/assets/asteroid.png"));
+        super(Assets.get("asteroid.png"));
 
         this.anchor = 0.5;
         this.scale = 0.5;
@@ -27,7 +27,7 @@ export class Asteroid extends Sprite {
 
 
     public static getAssetUrls(): string[] {
-        return ["/assets/asteroid.png"];
+        return ["asteroid.png"];
     }
 
 

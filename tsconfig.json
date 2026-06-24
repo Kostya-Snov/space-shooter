@@ -6,6 +6,9 @@
             "ESNext",
             "DOM"
         ],
+        "types": [
+            "vite/client"
+        ],
         "skipLibCheck": true,
         "moduleResolution": "bundler",
         "verbatimModuleSyntax": true,

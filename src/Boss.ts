@@ -45,7 +45,7 @@ export class Boss extends Container {
         super();
         this.onBossBulletCreate = onBossBulletCreate;
 
-        const sprite = new Sprite(Assets.get("/assets/boss.png"));
+        const sprite = new Sprite(Assets.get("boss.png"));
         sprite.anchor = 0.5;
         sprite.scale = 0.25;
         sprite.rotation = Math.PI;
@@ -63,7 +63,7 @@ export class Boss extends Container {
 
 
     public static getAssetUrls(): string[] {
-        return ["/assets/boss.png"];
+        return ["boss.png"];
     }
 
 
