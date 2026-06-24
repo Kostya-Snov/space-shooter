@@ -1,5 +1,7 @@
 import { Container } from "pixi.js"
+import { appConfig } from "./appConfig";
 import { assert } from "./assert";
+import { Asteroid } from "./Asteroid";
 import { Background } from "./Background";
 import { Spaceship } from "./Spaceship";
 import { SpaceshipBullet } from "./SpaceshipBullet";
@@ -8,6 +10,7 @@ import { SpaceshipBullet } from "./SpaceshipBullet";
 export class World extends Container {
     private readonly spaceship: Spaceship;
     private readonly spaceshipBullets: SpaceshipBullet[] = [];
+    private readonly asteroids: Asteroid[] = [];
 
 
     public constructor() {
@@ -30,11 +33,23 @@ export class World extends Container {
         }
         this.spaceship = new Spaceship(handleSpaceshipBulletCreate);
         this.addChild(this.spaceship);
+
+        this.asteroids = Array.from(
+            {
+                length: appConfig.asteroidCount
+            },
+            () => new Asteroid()
+        );
+        this.addChild(...this.asteroids);
     }
 
 
     public static getAssetUrls(): string[] {
-        return [...Background.getAssetUrls(), ...Spaceship.getAssetUrls()];
+        return [
+            ...Background.getAssetUrls(),
+            ...Spaceship.getAssetUrls(),
+            ...Asteroid.getAssetUrls()
+        ];
     }
 
 
@@ -42,6 +57,9 @@ export class World extends Container {
         this.spaceship.update(delta);
         for (const spaceshipBullet of this.spaceshipBullets) {
             spaceshipBullet.update(delta);
+        }
+        for (const asteroid of this.asteroids) {
+            asteroid.update(delta);
         }
     }
 }

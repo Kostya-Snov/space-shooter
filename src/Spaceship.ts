@@ -22,7 +22,7 @@ export class Spaceship extends Sprite {
 
         this.removeListenerFunctions = [];
 
-        this.scale.set(appConfig.spaceshipScale);
+        this.scale = appConfig.spaceshipScale;
         this.x = (appConfig.canvasWidth - this.width) / 2;
         this.y = appConfig.canvasHeight - this.height;
 

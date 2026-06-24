@@ -1,0 +1,1 @@
+export const getRandomNumber = (min: number, max: number) => min + Math.random() * (max - min);
