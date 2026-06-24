@@ -22,7 +22,7 @@ export class Spaceship extends Sprite {
 
         this.removeListenerFunctions = [];
 
-        this.scale = appConfig.spaceshipScale;
+        this.scale = 0.5;
         this.x = (appConfig.canvasWidth - this.width) / 2;
         this.y = appConfig.canvasHeight - this.height;
 
@@ -73,15 +73,17 @@ export class Spaceship extends Sprite {
 
 
     public update(delta: number): void {
+        const spaceshipSpeed = 0.3;
+
         switch (this.pressedKey) {
             case PressedKey.Left: {
-                const offset = delta * appConfig.spaceshipSpeed;
+                const offset = delta * spaceshipSpeed;
                 this.x = Math.max(this.x - offset, 0);
                 break;
             }
 
             case PressedKey.Right: {
-                const offset = delta * appConfig.spaceshipSpeed;
+                const offset = delta * spaceshipSpeed;
                 this.x = Math.min(this.x + offset, appConfig.canvasWidth - this.width);
                 break;
             }

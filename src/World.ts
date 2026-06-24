@@ -1,5 +1,4 @@
 import { Container } from "pixi.js"
-import { appConfig } from "./appConfig";
 import { assert } from "./assert";
 import { Asteroid } from "./Asteroid";
 import { Background } from "./Background";
@@ -59,9 +58,10 @@ export class World extends Container {
         this.spaceship = new Spaceship(handleSpaceshipBulletCreate);
         this.addChild(this.spaceship);
 
+        const asteroidInitialCount = 5;
         this.asteroids = Array.from(
             {
-                length: appConfig.asteroidCount
+                length: asteroidInitialCount
             },
             () => new Asteroid()
         );

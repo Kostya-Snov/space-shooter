@@ -1,5 +1,4 @@
 import { Graphics } from "pixi.js";
-import { appConfig } from "./appConfig";
 
 
 export class SpaceshipBullet extends Graphics {
@@ -17,10 +16,10 @@ export class SpaceshipBullet extends Graphics {
         this.onDisappear = onDisappear;
         this.onMove = onMove;
 
-        const { spaceshipBulletRadius } = appConfig;
+        const spaceshipBulletRadius = 10;
         this
             .setFillStyle({
-                color: appConfig.spaceshipBulletColor
+                color: 0x00FFFF
             })
             .circle(spaceshipBulletRadius, spaceshipBulletRadius, spaceshipBulletRadius)
             .fill();
@@ -30,7 +29,8 @@ export class SpaceshipBullet extends Graphics {
 
 
     public update(delay: number): void {
-        this.y -= delay * appConfig.spaceshipBulletSpeed;
+        const spaceshipBulletSpeed = 0.4;
+        this.y -= delay * spaceshipBulletSpeed;
         if (this.y <= -this.height) {
             this.onDisappear();
         } else {

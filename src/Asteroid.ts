@@ -10,8 +10,7 @@ const enum Direction {
 
 
 export class Asteroid extends Sprite {
-    private readonly speed
-        = getRandomNumber(appConfig.asteroidMinSpeed, appConfig.asteroidMaxSpeed);
+    private readonly speed = getRandomNumber(0.2, 0.4);
     private direction = getRandomNumber(0, 2) < 1 ? Direction.Left : Direction.Right;
 
 
@@ -19,7 +18,7 @@ export class Asteroid extends Sprite {
         super(Assets.get("/assets/asteroid.png"));
 
         this.anchor = 0.5;
-        this.scale = appConfig.asteroidScale;
+        this.scale = 0.5;
         this.rotation = getRandomNumber(0, 2 * Math.PI);
         const { width, height } = this.getBounds();
         this.x = getRandomNumber(width / 2, appConfig.canvasWidth - width / 2);
