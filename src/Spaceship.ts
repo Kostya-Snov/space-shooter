@@ -11,12 +11,14 @@ const enum PressedKey {
 
 
 export class Spaceship extends Sprite {
+    private readonly onSpaceshipBulletCreate: (centerX: number, bottomY: number) => void;
     private readonly removeListenerFunctions: (() => void)[];
     private pressedKey = PressedKey.None;
 
 
-    public constructor() {
+    public constructor(onSpaceshipBulletCreate: (centerX: number, bottomY: number) => void) {
         super(Assets.get("/assets/spaceship.png"));
+        this.onSpaceshipBulletCreate = onSpaceshipBulletCreate;
 
         this.removeListenerFunctions = [];
 
@@ -32,6 +34,10 @@ export class Spaceship extends Sprite {
 
                 case "ArrowRight":
                     this.pressedKey = PressedKey.Right;
+                    break;
+
+                case " ":
+                    this.onSpaceshipBulletCreate(this.x + this.width / 2, this.y);
                     break;
             }
         };
