@@ -57,4 +57,9 @@ export class Asteroid extends Sprite {
             }
         }
     }
+
+
+    public cleanup(): void {
+        this.destroy();
+    }
 }
